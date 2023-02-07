@@ -56,4 +56,4 @@
 >})();
 >```
 
-![example output](https://github.com/nickcognito/simply-prompt/blob/master/example/example1.jpg?raw=true)
+![example output](https://github.com/nickcognito/simply-prompt/blob/master/examples/example1.jpg?raw=true)
