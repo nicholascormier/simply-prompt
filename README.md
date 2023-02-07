@@ -1,20 +1,12 @@
 # simply-prompt
 
-## a safe and simple prompt utility.
-
+## a safe and simple prompt utility. 
 
 > ### API
 >
 >
 >
-> #### SP
-> <strong>a simply-prompt instance. can only be called once</strong>
 >
->
-> create(options?: CreateOptions): SPInstance
->
-> getInput(options: InputOptions): SchemaReturnType
-> 
 > <strong>example</strong>
 >
 > ```
@@ -57,3 +49,22 @@
 >```
 
 ![example output](https://github.com/nickcognito/simply-prompt/blob/master/examples/example1.jpg?raw=true)
+
+>###### powered by zod
+>
+>```
+> create(options?: CreateOptions): SPInstance
+>
+> getInput(options: InputOptions): SchemaReturnType
+>
+> type InputOptions = {
+>    schema: T extends zod.Schema,
+>    transform?: (input: string) => SchemaReturnType<T> | undefined,
+>    ...
+> }
+>
+> // zod is doing all of the magic here :)
+> type SchemaReturnType<T extends zod.Schema> z.infer<T>;
+>
+>``` 
+> - be sure to add coerce modifier to zod schema for types that are <strong>NOT</strong> strings (booleans & numbers).

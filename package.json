@@ -16,7 +16,7 @@
     "zod": "^3.20.2"
   },
   "scripts": {
-    "dev": "ts-node sp.ts",
+    "dev": "ts-node ./src/sp.ts",
     "build": "tsc"
   },
   "devDependencies": {

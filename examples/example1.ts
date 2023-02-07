@@ -1,4 +1,4 @@
-import { SP } from "../sp";
+import { SP } from "../src/sp";
 import { z } from "zod";
 const prompt = SP.create();
 

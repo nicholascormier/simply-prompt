@@ -1,34 +1,12 @@
 import { z, Schema } from "zod";
 import { stdin as input, stdout as output } from 'node:process';
 import * as readline from 'node:readline/promises';
-import colors from "colors";
+import { allColors } from "./types";
+import type { Color, SchemaReturnType, SPInstance } from "./types";
 
 const consoleInterface = readline.createInterface({ input, output });
 
-const allColors = {
-    "WHITE": colors.white,
-    "GREEN": colors.green,
-    "BLUE": colors.blue,
-    "YELLOW": colors.yellow,
-    "CYAN": colors.cyan,
-    "RED": colors.red,
-    "MAGENTA": colors.magenta,
-    "GREY": colors.grey
-} as const;
-
-type Color = keyof typeof allColors;
-
-type SchemaReturn<T extends Schema> = z.infer<T>;
-
-type TSP = {
-    color: string;
-    getInput<T extends Schema>(
-        { prompt, schema, color, transform }:
-        { prompt: string; schema: T; color?: Color; transform?: (input: string) => T; }
-    ): SchemaReturn<T>;
-}
-
-export class SP implements TSP {
+export class SP implements SPInstance {
 
     public color: Color;
     private deliminator: string;
@@ -47,7 +25,7 @@ export class SP implements TSP {
         return new SP(color, deliminator);
     }
 
-    public async getInput<T extends Schema>({ prompt, schema, color, transform }: { prompt: string; schema: T; color?: Color; transform?: (input: string) => SchemaReturn<T> | undefined; } ): Promise<SchemaReturn<T>> {
+    public async getInput<T extends Schema>({ prompt, schema, color, transform }: { prompt: string; schema: T; color?: Color; transform?: (input: string) => SchemaReturnType<T> | undefined; } ): Promise<SchemaReturnType<T>> {
         let hex: Color = color ? color : this.color; 
 
         const formattedPrompt = `${prompt}${this.deliminator} `;
@@ -57,7 +35,7 @@ export class SP implements TSP {
         let input = await consoleInterface.question(promptWithColor);
         consoleInterface.pause()
 
-        let parseInput: SchemaReturn<T> | undefined = transform?.(input);
+        let parseInput: SchemaReturnType<T> | undefined = transform?.(input);
 
         const parsedInput = schema.safeParse(parseInput || input);
 
