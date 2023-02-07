@@ -18,6 +18,7 @@
 > <strong>example</strong>
 >
 > ```
+>import { SP } from "simply-prompt";
 >import { z } from "zod";
 >
 >const prompt = SP.create();
