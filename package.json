@@ -1,0 +1,25 @@
+{
+  "name": "simply-prompt",
+  "description": "a safe and simple prompt utility.",
+  "version": "1.0.0",
+  "main": "sp.ts",
+  "license": "MIT",
+  "author": "nickcommit",
+  "keywords": [
+    "Typed",
+    "Prompt"
+  ],
+  "dependencies": {
+    "@types/node": "^18.13.0",
+    "colors": "^1.4.0",
+    "ts-node": "^10.9.1",
+    "zod": "^3.20.2"
+  },
+  "scripts": {
+    "dev": "ts-node sp.ts",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  }
+}
