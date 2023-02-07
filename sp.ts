@@ -18,13 +18,6 @@ const allColors = {
 
 type Color = keyof typeof allColors;
 
-type InputProperties = {
-    prompt: string;
-    schema: Schema;
-    color?: Color;
-    transform?: (input: string) => string;
-}
-
 type SchemaReturn<T extends Schema> = z.infer<T>;
 
 type TSP = {
@@ -81,40 +74,7 @@ function resolveColor(color: Color, message: string) {
     // maybe add modifier fields for more effects from colors lib
     return allColors[color](message);
 }
+
 // add schema parsing
 // add custom color api
 // add recurvise prompt on invalid schema
-
-(async () => {
-    
-    const prompt = SP.create();
-    const fname = await prompt.getInput({
-        prompt: "First name",
-        schema: z.string(),
-        color: "CYAN"
-    });
-
-    const lname = await prompt.getInput({
-        prompt: "Last name",
-        schema: z.string()
-    });
-
-    const is21 = await prompt.getInput({
-        prompt: "Are you at least 21?",
-        schema: z.coerce.boolean(),
-        transform: (input) => {
-            input = input.toLowerCase();
-            if (input == "y" || input == "yes") {
-                return true 
-            } else if (input == "n" || input == "no") {
-                return false
-            }
-        } 
-    });
-
-
-    console.log(fname, lname, is21);
-
-
-
-})()
