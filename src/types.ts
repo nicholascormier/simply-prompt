@@ -21,5 +21,5 @@ export type SPInstance = {
     getInput<T extends Schema>(
         { prompt, schema, color, transform }:
         { prompt: string; schema: T; color?: Color; transform?: (input: string) => T; }
-    ): SchemaReturn<T>;
+    ): SchemaReturnType<T>;
 }
