@@ -11,26 +11,25 @@
 >
 > ```
 >import { SP } from "simply-prompt";
->import { z } from "zod";
 >
 >const prompt = SP.create();
 >
 >(async() => {
 >
 >   const firstName = await prompt.getInput({
->      prompt: "First name",
->      schema: z.string(),
+>      message: "First name",
+>      type: "STRING",
 >      color: "CYAN"
 >   });
 >
 >   const lastName = await prompt.getInput({
->      prompt: "Last name",
->      schema: z.string()
+>      message: "Last name",
+>      type: "STRING"
 >   });
 >
 >   const is21 = await prompt.getInput({
->       prompt: "Are you at least 21?",
->       schema: z.coerce.boolean(),
+>       message: "Are you at least 21?",
+>       type: "BOOL",
 >       transform: (input) => {
 >           input = input.toLowerCase();
 >           if (input == "y" || input == "yes") {
@@ -53,18 +52,51 @@
 >###### powered by zod
 >
 >```
-> create(options?: CreateOptions): SPInstance
+> create(options?: OptionalPrompt): SPInstance
 >
-> getInput(options: InputOptions): SchemaReturnType
+> prompt(options: PromptOptions) => SchemaReturnType 
+> (SchemaReturnType is primative string / boolean / number)
 >
-> type InputOptions = {
->    schema: T extends zod.Schema,
+> promptBucket({ [string]: PromptOptions }) => BucketResponse 
+>
+> type PromptOptions = {
+>    message: string,
+>    type: "STRING" | "BOOL" | "NUMBER",
+>    deliminator?: string,
+>    color?: Color,
 >    transform?: (input: string) => SchemaReturnType<T> | undefined,
->    ...
 > }
 >
 > // zod is doing all of the magic here :)
 > type SchemaReturnType<T extends zod.Schema> z.infer<T>;
->
 >``` 
-> - be sure to add coerce modifier to zod schema for types that are <strong>NOT</strong> strings (booleans & numbers).
+>```
+>import { SP } from "../src/sp";
+>
+>(async () => {
+>    
+>    const prompt = SP.create();
+>    
+>    const bucket1 = await prompt.promptBucket({
+>        "prompt1": {
+>            message: "Question 1",
+>            type: "STRING" 
+>        },
+>        "prompt2": {
+>            message: "Question 2",
+>            type: "BOOL"
+>        },
+>        "prompt3": {
+>            message: "Question 3",
+>            type: "NUMBER"
+>        }
+>    });
+>
+>    const { prompt1,  prompt2, prompt3 } = bucket1;
+>
+>    // typeof prompt1 = "string"
+>    // typeof prompt2 = "bool"
+>    // typeof prompt3 = "number"
+>
+>})()
+>```
