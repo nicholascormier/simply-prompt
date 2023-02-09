@@ -11,7 +11,6 @@
 >
 >   const firstName = await prompt.getInput({
 >      message: "First name",
->      type: "STRING",
 >      schema: z.string()
 >   });
 >
