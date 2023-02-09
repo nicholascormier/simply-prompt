@@ -1,5 +1,6 @@
 import { z, Schema } from "zod";
 import colors from "colors";
+import { SP } from "./sp";
 
 export const AllColors = {
     "WHITE": colors.white,
@@ -14,37 +15,17 @@ export const AllColors = {
 
 export type Color = keyof typeof AllColors;
 
-export const PromptTypes = {
-    "STRING": z.string(),
-    "BOOL": z.coerce.boolean(),
-    "NUMBER": z.coerce.number()
-} as const;
-
-export type PromptType = keyof typeof PromptTypes;
-
 export type SchemaReturnType<T extends Schema> = z.infer<T>;
 
-export type PromptOptions<T extends Schema> = {
+export type RawPrompt = {
     message: string;
-    type: PromptType;
-    deliminator?: string;
-    color?: Color;
-    transform?: (input: string) => SchemaReturnType<T> | undefined;
-}
-
-export type SPInstance = {
-    prompt<T extends Schema>(
-        { message, type, color, transform }: PromptOptions<T>
-    ): SchemaReturnType<T>;
-    promptBucket<T extends BucketInput>(input: T): Promise<BucketResponse<T>>;
-}
-
-export type OptionalPrompt = {
     color?: Color;
     deliminator?: string;
 }
 
-export type RawPrompt = OptionalPrompt & { message: string }
+type PromptStyle = Pick<RawPrompt, "color" | "deliminator">
+
+export type OptionalPromptStyle = Partial<PromptStyle>;
 
 // based dev
 
@@ -52,8 +33,22 @@ export type BucketInput = {
     [key: string]: PromptOptions<Schema>
 };
 
-type ResolveSchemaFromType<T extends PromptType> = typeof PromptTypes[T];
-
 export type BucketResponse<T extends BucketInput, K extends keyof T = keyof T> = { 
-    [Property in K]: z.infer<ResolveSchemaFromType<T[Property]["type"]>>;
+    [Property in K]: SchemaReturnType<T[Property]["schema"]>;
+}
+
+export type PromptOptions<T extends Schema> = {
+    message: string;
+    schema: T;
+    deliminator?: string;
+    color?: Color;
+    transform?: (input: string) => SchemaReturnType<T> | undefined;
+}
+
+export type SPInstance = {
+    prompt: <T extends Schema>(
+        PromptInputOptions: PromptOptions<T>
+    ) => SchemaReturnType<T>;
+    promptBucket: <T extends BucketInput>(PromptBucketInputOptions: T) => Promise<BucketResponse<T>>;
+    setNewDefaults: (PropmtStyleOptions: OptionalPromptStyle) => void;
 }

@@ -1,14 +1,7 @@
-# simply-prompt
+# simply-prompt 
+#### a safe and simple prompt utility. 
 
-## a safe and simple prompt utility. 
-
-> ### API
->
->
->
->
-> <strong>example</strong>
->
+> ## Creating individual prompts
 > ```
 >import { SP } from "simply-prompt";
 >
@@ -57,7 +50,7 @@
 > prompt(options: PromptOptions) => SchemaReturnType 
 > (SchemaReturnType is primative string / boolean / number)
 >
-> promptBucket({ [string]: PromptOptions }) => BucketResponse 
+> promptBucket({ [K: string]: PromptOptions }) => BucketResponse 
 >
 > type PromptOptions = {
 >    message: string,
@@ -70,33 +63,103 @@
 > // zod is doing all of the magic here :)
 > type SchemaReturnType<T extends zod.Schema> z.infer<T>;
 >``` 
+## Creating a Prompt Bucket 
 >```
->import { SP } from "../src/sp";
+>(async () => {
+>    
+>    const prompt = SP.create();
+>    
+>    const bucket = await prompt.promptBucket({
+>        "first_name": {
+>            message: "Enter your first name",
+>            schema: z.string()
+>        },
+>        "last_name": {
+>            message: "Enter your last name",
+>            schema: z.string()
+>        },
+>        "age": {
+>            message: "Enter your age",
+>            schema: z.coerce.number()
+>        }
+>    });
+>
+>    const { first_name,  last_name, age } = bucket;
+>
+>    // typeof first_name = "string"
+>    // typeof last_name = "string"
+>    // typeof age = "number"
+>
+>})()
+>```
+
+> - there is no need for shapes more complex than string, boolean & number.
+> - this is because you can cast your prompt types to more complex types
+##### example:
+>
+>```
+> import { SP } from "simply-prompt";
+> import { z } from "zod";
 >
 >(async () => {
 >    
 >    const prompt = SP.create();
 >    
 >    const bucket1 = await prompt.promptBucket({
->        "prompt1": {
->            message: "Question 1",
->            type: "STRING" 
+>        "first_name": {
+>            message: "Enter your first name",
+>            schema: z.string()
 >        },
->        "prompt2": {
->            message: "Question 2",
->            type: "BOOL"
+>        "last_name": {
+>            message: "Enter your last name",
+>            schema: z.coerce.boolean()
 >        },
->        "prompt3": {
->            message: "Question 3",
->            type: "NUMBER"
->        }
+>        "age": {
+>            message: "Enter your age",
+>            schema: z.coerce.number()
+>        },
+>        "favorite_food": {
+>            message: "Enter your favorite food",
+>            schema: z.string()
+>        },
+>        "favorite_color": {
+>            message: "Enter your favorite color",
+>            schema: z.string()
+>        },
 >    });
 >
->    const { prompt1,  prompt2, prompt3 } = bucket1;
+>    const { 
+>       first_name,
+>       last_name, 
+>       age,
+>       favorite_food,
+>       favorite_color
+>     } = bucket1;
 >
->    // typeof prompt1 = "string"
->    // typeof prompt2 = "bool"
->    // typeof prompt3 = "number"
+>    const Nick = {
+>        identity: {
+>            first_name,
+>            last_name,
+>            age
+>        },
+>        preferences: {
+>            favorite_food,
+>            favorite_color
+>        }
+>    }
+>
+>    /*
+>    shape of "Nick" {
+>        identity: {
+>            first_name: string;
+>            last_name: string;
+>            age: number;
+>        };
+>        preferences: {
+>            favorite_food: string;
+>            favorite_color: string;
+>        };
+>    }
+>    */
 >
 >})()
->```

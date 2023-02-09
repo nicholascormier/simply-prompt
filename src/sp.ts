@@ -1,7 +1,7 @@
 import { Schema } from "zod";
 import { stdin, stdout } from 'node:process';
 import * as readline from 'node:readline/promises';
-import { InputOptions, RawPrompt, AllColors, PromptType, PromptTypes, OptionalPrompt } from "./types";
+import { RawPrompt, AllColors, PromptOptions, OptionalPromptStyle } from "./types";
 import type { Color, SchemaReturnType, SPInstance, BucketInput, BucketResponse } from "./types";
 
 const consoleInterface = readline.createInterface({ input: stdin, output: stdout });
@@ -12,7 +12,7 @@ export class SP implements SPInstance {
     private deliminator: string;
     private static initialized = false;
 
-    private constructor(options: Required<OptionalPrompt>) {
+    private constructor(options: Required<OptionalPromptStyle>) {
         const { color, deliminator } = options;
         this.color = color;
         this.deliminator = deliminator;
@@ -21,10 +21,6 @@ export class SP implements SPInstance {
 
     private _resolveColor(color: Color, message: string) {
         return AllColors[color](message)
-    }
-
-    private _resolveSchema(type: PromptType) {
-        return PromptTypes[type];
     }
 
     private async _getInputFromTerminal(input: RawPrompt) {
@@ -45,7 +41,7 @@ export class SP implements SPInstance {
         return resolvedMessage;
     }
 
-    static create(options?: OptionalPrompt) {
+    static create(options?: OptionalPromptStyle) {
         if (SP.initialized) throw new Error("Prompt alread initialized.");
         const color = options?.color ? options?.color : "WHITE";
         const deliminator = options?.deliminator ? options?.deliminator : ":";
@@ -53,11 +49,10 @@ export class SP implements SPInstance {
     }
 
     public async prompt<T extends Schema>(
-        { message, type, color, deliminator, transform }:
-        InputOptions<T>
+        { message, schema, color, deliminator, transform }:
+        PromptOptions<T>
     ): Promise<SchemaReturnType<T>> {
 
-        const schema = this._resolveSchema(type);
         const userInput = await this._getInputFromTerminal({ message, color, deliminator });
 
         const transformed: SchemaReturnType<T> | undefined = transform?.(userInput);
@@ -83,6 +78,12 @@ export class SP implements SPInstance {
     
         return returnVal;
 
+    }
+
+    public setNewDefaults(options: OptionalPromptStyle): void {
+        const { color, deliminator } = options;
+        if (color) this.color = color;
+        if (deliminator) this.deliminator = deliminator;
     }
 
 }
