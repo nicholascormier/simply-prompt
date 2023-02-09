@@ -1,7 +1,7 @@
 {
   "name": "simply-prompt",
   "description": "a safe and simple prompt utility.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "sp.ts",
   "license": "MIT",
   "author": "nickcommit",
