@@ -10,31 +10,31 @@ import { z } from "zod";
             message: "Enter your first name",
             schema: z.string(),
             color: "MAGENTA",
-            deliminator: "$ "
+            delimiter: "$ "
         },
         "last_name": {
             message: "Enter your last name",
             schema: z.string(),
             color: "GREEN",
-            deliminator: " - "
+            delimiter: " - "
         },
         "age": {
             message: "Enter your age",
             schema: z.coerce.number(),
             color: "YELLOW",
-            deliminator: "# "
+            delimiter: "# "
         },
         "favorite_color": {
             message: "Enter your favorite color",
             schema: z.string(),
             color: "RED",
-            deliminator: "/ "
+            delimiter: "/ "
         },
         "favorite_food": {
             message: "Enter your favorite food",
             schema: z.string(),
             color: "CYAN",
-            deliminator: ": "
+            delimiter: ": "
         }
     });
 

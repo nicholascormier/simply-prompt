@@ -20,10 +20,10 @@ export type SchemaReturnType<T extends Schema> = z.infer<T>;
 export type RawPrompt = {
     message: string;
     color?: Color;
-    deliminator?: string;
+    delimiter?: string;
 }
 
-type PromptStyle = Pick<RawPrompt, "color" | "deliminator">
+type PromptStyle = Pick<RawPrompt, "color" | "delimiter">
 
 export type OptionalPromptStyle = Partial<PromptStyle>;
 
@@ -40,7 +40,7 @@ export type BucketResponse<T extends BucketInput, K extends keyof T = keyof T> =
 export type PromptOptions<T extends Schema> = {
     message: string;
     schema: T;
-    deliminator?: string;
+    delimiter?: string;
     color?: Color;
     transform?: (input: string) => SchemaReturnType<T> | undefined;
 }

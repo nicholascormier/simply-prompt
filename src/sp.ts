@@ -9,13 +9,13 @@ const consoleInterface = readline.createInterface({ input: stdin, output: stdout
 export class SP implements SPInstance {
 
     private color: Color;
-    private deliminator: string;
+    private delimiter: string;
     private static initialized = false;
 
     private constructor(options: Required<OptionalPromptStyle>) {
-        const { color, deliminator } = options;
+        const { color, delimiter } = options;
         this.color = color;
-        this.deliminator = deliminator;
+        this.delimiter = delimiter;
         SP.initialized = true;
     }
 
@@ -31,9 +31,9 @@ export class SP implements SPInstance {
         return response;
     }
     
-    private _preparePrompt({ color, deliminator, message }: RawPrompt) {
+    private _preparePrompt({ color, delimiter, message }: RawPrompt) {
         const c = color || this.color;
-        const d = deliminator || this.deliminator;
+        const d = delimiter || this.delimiter;
 
         const msg = `${message}${d}`;
         const resolvedMessage = this._resolveColor(c, msg);
@@ -44,16 +44,16 @@ export class SP implements SPInstance {
     static create(options?: OptionalPromptStyle) {
         if (SP.initialized) throw new Error("Prompt alread initialized.");
         const color = options?.color ? options?.color : "WHITE";
-        const deliminator = options?.deliminator ? options?.deliminator : ":";
-        return new SP({ color, deliminator });
+        const delimiter = options?.delimiter ? options?.delimiter : ":";
+        return new SP({ color, delimiter });
     }
 
     public async prompt<T extends Schema>(
-        { message, schema, color, deliminator, transform }:
+        { message, schema, color, delimiter, transform }:
         PromptOptions<T>
     ): Promise<SchemaReturnType<T>> {
 
-        const userInput = await this._getInputFromTerminal({ message, color, deliminator });
+        const userInput = await this._getInputFromTerminal({ message, color, delimiter });
 
         const transformed: SchemaReturnType<T> | undefined = transform?.(userInput);
         const parsedInput = schema.safeParse(transformed || userInput);
@@ -81,9 +81,9 @@ export class SP implements SPInstance {
     }
 
     public setNewDefaults(options: OptionalPromptStyle): void {
-        const { color, deliminator } = options;
+        const { color, delimiter } = options;
         if (color) this.color = color;
-        if (deliminator) this.deliminator = deliminator;
+        if (delimiter) this.delimiter = delimiter;
     }
 
 }

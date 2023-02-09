@@ -54,7 +54,7 @@
 > type PromptOptions = {
 >    message: string,
 >    schema: zod.Schema,
->    deliminator?: string,
+>    delimiter?: string,
 >    color?: Color,
 >    transform?: (input: string) => SchemaReturnType<T> | undefined,
 > }
