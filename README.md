@@ -12,17 +12,17 @@
 >   const firstName = await prompt.getInput({
 >      message: "First name",
 >      type: "STRING",
->      color: "CYAN"
+>      schema: z.string()
 >   });
 >
 >   const lastName = await prompt.getInput({
 >      message: "Last name",
->      type: "STRING"
+>      schema: z.string()
 >   });
 >
 >   const is21 = await prompt.getInput({
 >       message: "Are you at least 21?",
->       type: "BOOL",
+>       schema: zod.coerce.boolean(),
 >       transform: (input) => {
 >           input = input.toLowerCase();
 >           if (input == "y" || input == "yes") {
@@ -54,7 +54,7 @@
 >
 > type PromptOptions = {
 >    message: string,
->    type: "STRING" | "BOOL" | "NUMBER",
+>    schema: zod.Schema,
 >    deliminator?: string,
 >    color?: Color,
 >    transform?: (input: string) => SchemaReturnType<T> | undefined,
@@ -86,9 +86,9 @@
 >
 >    const { first_name,  last_name, age } = bucket;
 >
->    // typeof first_name = "string"
->    // typeof last_name = "string"
->    // typeof age = "number"
+>    // typeof first_name = string
+>    // typeof last_name = string
+>    // typeof age = number
 >
 >})()
 >```
