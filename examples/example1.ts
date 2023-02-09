@@ -1,22 +1,23 @@
 import { SP } from "../src/sp";
 import { z } from "zod";
-const prompt = SP.create();
 
 (async() => {
 
-    const firstName = await prompt.getInput({
-        prompt: "First name",
+    const sp = SP.create();
+
+    const firstName = await sp.prompt({
+        message: "First name",
         schema: z.string(),
         color: "CYAN"
     });
 
-    const lastName = await prompt.getInput({
-        prompt: "Last name",
+    const lastName = await sp.prompt({
+        message: "Last name",
         schema: z.string()
     });
 
-    const is21 = await prompt.getInput({
-        prompt: "Are you at least 21?",
+    const is21 = await sp.prompt({
+        message: "Are you at least 21?",
         schema: z.coerce.boolean(),
         transform: (input) => {
             input = input.toLowerCase();

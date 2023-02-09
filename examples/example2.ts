@@ -1,29 +1,82 @@
 import { SP } from "../src/sp";
+import { z } from "zod";
 
 (async () => {
     
-    const prompt = SP.create();
+    const sp = SP.create();
     
-    const bucket1 = await prompt.promptBucket({
-        "prompt1": {
-            message: "Question 1",
-            type: "STRING" 
+    const bucket = await sp.promptBucket({
+        "first_name": {
+            message: "Enter your first name",
+            schema: z.string(),
+            color: "MAGENTA",
+            deliminator: "$ "
         },
-        "prompt2": {
-            message: "Question 2",
-            type: "BOOL"
+        "last_name": {
+            message: "Enter your last name",
+            schema: z.string(),
+            color: "GREEN",
+            deliminator: " - "
         },
-        "prompt3": {
-            message: "Question 3",
-            type: "NUMBER"
+        "age": {
+            message: "Enter your age",
+            schema: z.coerce.number(),
+            color: "YELLOW",
+            deliminator: "# "
+        },
+        "favorite_color": {
+            message: "Enter your favorite color",
+            schema: z.string(),
+            color: "RED",
+            deliminator: "/ "
+        },
+        "favorite_food": {
+            message: "Enter your favorite food",
+            schema: z.string(),
+            color: "CYAN",
+            deliminator: ": "
         }
     });
 
-    const { prompt1,  prompt2, prompt3 } = bucket1;
+    const { first_name, last_name, age, favorite_color, favorite_food } = bucket;
 
-    // typeof prompt1 = "string"
-    // typeof prompt2 = "bool"
-    // typeof prompt3 = "number"
+    // typeof first_name = "string"
+    // typeof last_name = "bool"
+    // typeof age = "number"
+    // typeof favorite_color = "string"
+    // typeof favotire_food = "string"
 
-})()
+    // there is no need for shapes more complex than string, boolean & number.
+    // this is because you can cast your prompt types to more complex types
+    // example:
+
+    const Nick = {
+        identity: {
+            first_name,
+            last_name,
+            age
+        },
+        preferences: {
+            favorite_food,
+            favorite_color
+        }
+    };
+
+    /*
+
+    shape of "Nick" {
+        identity: {
+            first_name: string;
+            last_name: string;
+            age: number;
+        };
+        preferences: {
+            favorite_food: string;
+            favorite_color: string;
+        };
+    }
+
+    */
+
+})();
 
