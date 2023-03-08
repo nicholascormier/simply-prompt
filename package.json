@@ -1,10 +1,10 @@
 {
   "name": "simply-prompt",
   "description": "a safe and simple prompt utility.",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "sp.ts",
   "license": "MIT",
-  "author": "nickcommit",
+  "author": "nicholascormier",
   "keywords": [
     "Typed",
     "Prompt"
